@@ -198,6 +198,19 @@ Required Tech: Telemetry devices sending real-time data to the cloud. AI/ML plat
 Strategic Value: Minimizes "truck rolls" by ensuring drivers only visit machines that actually need restocking, saving massive fuel and labor costs. AI also optimizes merchandising by recommending the best product mix (planogram) for each specific machine, preventing stockouts of best-sellers and reducing spoilage of fresh foods.`,
     tags: ['AI', 'Predictive', 'Logistics', 'Routing'] 
   },
+  { 
+    id: 's5', 
+    category: 'Strategy & Innovation', 
+    title: 'Location-Based Inventory Strategy (SA)', 
+    content: `Inventory must be highly tailored to the specific demographics and foot traffic of the location. A one-size-fits-all approach leads to poor sales and high spoilage.
+
+Malls: High foot traffic means basics like water, Coca-Cola, and universally loved chips and chocolates move quickly. Focus on high volume and broad appeal.
+Transit Hubs (e.g., Cape Town Station, Airport): Quick energy items (Red Bull, biltong) and travel convenience items (tissues, charging cables, pain medication like Panado) are highly lucrative. These locations support premium pricing for convenience.
+Universities (e.g., UCT, CPUT): Students favor energy-boosting items for late-night studying (energy drinks, Bar One, Jungle Oats bars) and affordable savory snacks. Price sensitivity is higher, but volume can offset lower margins.
+
+Strategic Value: Matching the product mix to the micro-environment maximizes revenue per square meter and significantly reduces the risk of slow-moving inventory.`,
+    tags: ['Location', 'Inventory', 'Malls', 'Transit', 'Universities'] 
+  },
 
   // Psychology
   { 

@@ -138,15 +138,18 @@ export default function FinancialModeler() {
   const paybackMonths = netProfit > 0 ? (totalCapex / netProfit).toFixed(1) : '∞';
 
   return (
-    <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+    <>
+    <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'row' }}>
       
-      <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
-        <h2 style={{ fontSize: '2.5rem', fontWeight: 800, margin: 0, background: 'linear-gradient(45deg, #3b82f6, #8b5cf6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Deep Financial Modeler</h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', marginTop: '0.5rem' }}>Interactive Unit Economics & P&L Forecaster</p>
-      </div>
+      {/* LEFT CONTENT AREA */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '2rem', paddingRight: '420px', width: '100%' }}>
+        
+        <div style={{ textAlign: 'left', marginBottom: '1rem' }}>
+          <h2 style={{ fontSize: '2.5rem', fontWeight: 800, margin: 0, background: 'linear-gradient(45deg, #3b82f6, #8b5cf6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Deep Financial Modeler</h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', marginTop: '0.5rem' }}>Interactive Unit Economics & P&L Forecaster</p>
+        </div>
 
-      <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start', flexWrap: 'wrap' }}>
-        <div style={{ flex: '1 1 60%', display: 'flex', flexDirection: 'column', gap: '2rem', minWidth: '350px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', width: '100%' }}>
           
           {/* TOP CONTROLS */}
           <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
@@ -323,10 +326,26 @@ export default function FinancialModeler() {
 
       </div>
         </div>
+      </div>
 
-        <div style={{ flex: '1 1 30%', position: 'sticky', top: '2rem', minWidth: '320px' }}>
-          {/* MASTER P&L */}
-          <div className="glass-panel" style={{ background: 'linear-gradient(145deg, rgba(30,30,40,0.8), rgba(20,20,30,0.9))' }}>
+      {/* RIGHT FIXED PANEL */}
+      <div style={{ 
+        position: 'fixed', 
+        top: 0, 
+        right: 0, 
+        width: '400px', 
+        height: '100vh', 
+        overflowY: 'auto', 
+        background: 'linear-gradient(145deg, rgba(20,20,25,0.98), rgba(10,10,15,0.98))', 
+        borderLeft: '1px solid rgba(255,255,255,0.05)',
+        padding: '2rem',
+        zIndex: 50,
+        boxShadow: '-10px 0 30px rgba(0,0,0,0.5)',
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
+        {/* MASTER P&L */}
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
         <h3 style={{ borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem', marginBottom: '1.5rem', fontSize: '1.2rem' }}>Fleet Profit & Loss (Monthly)</h3>
         
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '2rem', marginBottom: '2rem' }}>
@@ -401,11 +420,10 @@ export default function FinancialModeler() {
             </div>
           </div>
         </div>
-
-      </div>
-        </div>
       </div>
 
     </div>
+    </div>
+    </>
   );
 }
