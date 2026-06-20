@@ -17,21 +17,46 @@ const formatCurrency = (value) => {
 };
 
 const defaultInventory = [
+  // Drinks
   { id: '1', name: 'Coca-Cola Original (300ml Can)', category: 'Drinks', cost: 12.50, price: 20.00, volume: 40, enabled: true },
   { id: '2', name: 'Valpré Still Water (500ml Bottle)', category: 'Drinks', cost: 7.50, price: 15.00, volume: 30, enabled: true },
   { id: '3', name: 'Red Bull Energy Drink (250ml Can)', category: 'Drinks', cost: 18.50, price: 35.00, volume: 20, enabled: true },
   { id: '4', name: 'Lipton Peach Iced Tea (300ml Can)', category: 'Drinks', cost: 13.00, price: 22.00, volume: 20, enabled: true },
   { id: '5', name: 'Steri Stumpie Flavoured Milk (350ml)', category: 'Drinks', cost: 14.50, price: 25.00, volume: 20, enabled: true },
+  { id: 'd1', name: 'Sprite (300ml Can)', category: 'Drinks', cost: 12.00, price: 20.00, volume: 30, enabled: true },
+  { id: 'd2', name: 'Fanta Orange (300ml Can)', category: 'Drinks', cost: 12.00, price: 20.00, volume: 25, enabled: true },
+  { id: 'd3', name: 'Appletiser (330ml Can)', category: 'Drinks', cost: 16.50, price: 28.00, volume: 15, enabled: true },
+  { id: 'd4', name: 'Score Energy Drink (500ml Can)', category: 'Drinks', cost: 10.00, price: 18.00, volume: 35, enabled: true },
+  // Chips
   { id: '6', name: 'Simba Chips (36g)', category: 'Chips', cost: 7.70, price: 15.00, volume: 30, enabled: true },
   { id: '7', name: "Lay's Lightly Salted (36g)", category: 'Chips', cost: 8.00, price: 15.00, volume: 30, enabled: true },
   { id: '8', name: 'Doritos Sweet Chilli Pepper (45g)', category: 'Chips', cost: 8.50, price: 16.00, volume: 25, enabled: true },
+  { id: 'c1', name: 'NikNaks Cheese (55g)', category: 'Chips', cost: 6.50, price: 12.00, volume: 35, enabled: true },
+  { id: 'c2', name: 'Fritos Tomato (120g)', category: 'Chips', cost: 14.50, price: 25.00, volume: 15, enabled: true },
+  { id: 'c3', name: 'Pringles Original (42g)', category: 'Chips', cost: 15.00, price: 28.00, volume: 10, enabled: true },
+  // Snacks
   { id: '9', name: 'Safari Peanuts & Raisins (50g)', category: 'Snacks', cost: 8.50, price: 16.00, volume: 25, enabled: true },
   { id: '10', name: 'Beef Biltong Snack Pack (35g)', category: 'Snacks', cost: 22.00, price: 40.00, volume: 15, enabled: true },
+  { id: 'sn1', name: 'Droëwors (50g)', category: 'Snacks', cost: 25.00, price: 45.00, volume: 12, enabled: true },
+  { id: 'sn2', name: 'Tinkies Vanilla (45g)', category: 'Snacks', cost: 7.00, price: 12.00, volume: 20, enabled: true },
+  { id: 'sn3', name: 'Bakers Tennis Biscuits (200g)', category: 'Snacks', cost: 18.00, price: 30.00, volume: 10, enabled: true },
+  // Chocolates
   { id: '11', name: 'Cadbury Lunch Bar (48g)', category: 'Chocolates', cost: 9.50, price: 18.00, volume: 20, enabled: true },
   { id: '12', name: 'Nestlé Bar One (50g)', category: 'Chocolates', cost: 10.50, price: 20.00, volume: 20, enabled: true },
   { id: '13', name: 'Jungle Oats Energy Bar (40g)', category: 'Chocolates', cost: 9.00, price: 18.00, volume: 20, enabled: true },
-  { id: '14', name: 'Maynards Jelly Tots (100g)', category: 'Sweets', cost: 16.00, price: 28.00, volume: 15, enabled: true },
   { id: '15', name: 'Cadbury Dairy Milk Slab (80g)', category: 'Chocolates', cost: 18.50, price: 30.00, volume: 15, enabled: true },
+  { id: 'ch1', name: 'Peppermint Crisp (49g)', category: 'Chocolates', cost: 11.00, price: 20.00, volume: 18, enabled: true },
+  { id: 'ch2', name: 'Crunchie (40g)', category: 'Chocolates', cost: 10.50, price: 18.00, volume: 15, enabled: true },
+  { id: 'ch3', name: 'Nestlé Tex (40g)', category: 'Chocolates', cost: 8.50, price: 15.00, volume: 22, enabled: true },
+  { id: 'ch4', name: 'KitKat 4 Finger (41.5g)', category: 'Chocolates', cost: 11.50, price: 20.00, volume: 25, enabled: true },
+  { id: 'ch5', name: 'Cadbury Top Deck (80g)', category: 'Chocolates', cost: 18.50, price: 30.00, volume: 12, enabled: true },
+  { id: 'ch6', name: 'Aero Milk Chocolate (85g)', category: 'Chocolates', cost: 19.00, price: 32.00, volume: 10, enabled: true },
+  // Sweets
+  { id: '14', name: 'Maynards Jelly Tots (100g)', category: 'Sweets', cost: 16.00, price: 28.00, volume: 15, enabled: true },
+  { id: 'sw1', name: 'Beacon Allsorts (75g)', category: 'Sweets', cost: 14.00, price: 25.00, volume: 18, enabled: true },
+  { id: 'sw2', name: 'Mister Sweet Speckled Eggs (125g)', category: 'Sweets', cost: 22.00, price: 40.00, volume: 12, enabled: true },
+  { id: 'sw3', name: 'Fizzer Strawberry (Per Piece)', category: 'Sweets', cost: 2.00, price: 5.00, volume: 50, enabled: true },
+  // Essentials
   { id: '16', name: 'Panado Pain Tablets (2-Pack Foil)', category: 'Essentials', cost: 5.00, price: 12.00, volume: 20, enabled: true },
   { id: '17', name: 'Twinsaver Pocket Tissues', category: 'Essentials', cost: 4.50, price: 10.00, volume: 20, enabled: true },
   { id: '18', name: 'Universal Charging Cable (USB-C)', category: 'Essentials', cost: 35.00, price: 80.00, volume: 5, enabled: true },
