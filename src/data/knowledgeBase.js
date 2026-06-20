@@ -347,5 +347,93 @@ For example, a wholesale can of Coca-Cola might cost ~R12 at Makro. Sold at reta
 
 A well-placed, fully stocked machine in a high-traffic location typically yields a 20-25% net operating margin after factoring in electricity, location rent (or 10% commission), fuel for the driver, and SaaS fees, translating to R2,000 to R15,000 of passive net income per machine, per month.`,
     tags: ['Margins', 'FMCG', 'Profit', 'Metrics'] 
+  },
+  
+  // Cape Town Locations
+  { 
+    id: 'loc1', 
+    category: 'Cape Town Locations', 
+    title: 'Shopping Malls & Retail Hubs', 
+    content: `Malls provide consistent, high-volume foot traffic, particularly on weekends and during holidays.
+
+• V&A Waterfront (Waterfront / Harbour) - Extremely high tourist and local traffic. Co-owned/managed by Growthpoint Properties.
+• Canal Walk Shopping Centre (Century City) - The largest mall in Cape Town, serving the northern and southern suburbs. Owned by Hyprop Investments.
+• Cavendish Square (Claremont) - Premium mall in the southern suburbs with strong student and professional foot traffic. Owned by Old Mutual Property.
+• Tyger Valley Centre (Bellville) - Major hub for the northern suburbs. Managed by Broll Property Group.
+• CapeGate Shopping Centre (Brackenfell) - High-traffic family mall. Owned by Hyprop Investments.
+• Blue Route Mall (Tokai) - Anchors the deep south. Owned by Redefine Properties.
+• Kenilworth Centre (Kenilworth) - High local commuter traffic. Owned by Redefine Properties.`,
+    tags: ['Malls', 'Retail', 'High Foot Traffic'] 
+  },
+  { 
+    id: 'loc2', 
+    category: 'Cape Town Locations', 
+    title: 'Universities & Colleges', 
+    content: `Captive audiences of students and staff who require quick convenience items.
+
+• University of Cape Town (UCT): Upper Campus (Rondebosch) Main Hub, Middle/Lower Campus (high density student residences), Medical Campus (Observatory).
+• Cape Peninsula University of Technology (CPUT): District Six Campus (Cape Town CBD) and Bellville Campus (Massive student population).
+• University of the Western Cape (UWC): Large isolated campus in Bellville, excellent for captive vending.
+• Private Colleges: Varsity College (Newlands) and Rosebank College (Cape Town CBD).`,
+    tags: ['Education', 'Students', 'Captive Audience'] 
+  },
+  { 
+    id: 'loc3', 
+    category: 'Cape Town Locations', 
+    title: 'Hospitals & Clinics', 
+    content: `Medical facilities have 24/7 operations where staff, patients, and visitors need access to food/drinks after hours.
+
+Public Hospitals:
+• Groote Schuur Hospital (Observatory) - One of the largest public hospitals in SA.
+• Tygerberg Hospital (Bellville) - Massive footprint, thousands of staff/patients daily.
+• Red Cross War Memorial Children's Hospital (Rondebosch).
+
+Private Hospitals:
+• Netcare Christiaan Barnard Memorial Hospital (Foreshore / CBD).
+• Mediclinic Cape Town (Oranjezicht) and Mediclinic Panorama.
+• Life Kingsbury Hospital (Claremont).
+• Melomed Bellville & Melomed Gatesville.`,
+    tags: ['Healthcare', '24/7', 'Hospitals'] 
+  },
+  { 
+    id: 'loc4', 
+    category: 'Cape Town Locations', 
+    title: 'Transit Hubs', 
+    content: `High-paced environments where convenience is critical.
+
+• Cape Town International Airport (Matroosfontein) - Managed by ACSA. Key areas: Arrivals, departures, and car rental returns.
+• Cape Town Railway Station (CBD) - The main train terminal, managed by PRASA. Millions of commuters annually.
+• Bellville Railway Station (Bellville) - A massive interchange for trains and minibus taxis.
+• MyCiTi Bus Stations: Civic Centre Main Station (CBD), Thibault Square Station, Table View Station.
+• Cape Town Station Taxi Rank (CBD deck) - Huge foot traffic, ideal for robust/rugged vending machines.`,
+    tags: ['Transit', 'High Paced', 'Commuters'] 
+  },
+  { 
+    id: 'loc5', 
+    category: 'Cape Town Locations', 
+    title: 'Corporate Office Parks & Industrial Areas', 
+    content: `Areas with dense worker populations who have limited time during breaks.
+
+• Black River Park (Observatory) - One of the largest and greenest office parks in SA. Owned by Redefine Properties.
+• Century City Office Parks - Encompasses multiple parks like The Estuaries and Bridgeways Precinct. Developed by Rabie Property Group.
+• The Boulevard Office Park (Woodstock) - High-density corporate park right off the highway.
+• Parc du Cap (Bellville) - Major corporate park in the northern suburbs, owned by Growthpoint Properties.
+• Industrial Hubs (for robust machines): Epping Industrial, Montague Gardens, and Airport Industria.`,
+    tags: ['Corporate', 'Industrial', 'Office Parks'] 
+  },
+  { 
+    id: 'loc6', 
+    category: 'Cape Town Locations', 
+    title: 'Prominent Property Management Firms & REITs', 
+    content: `When approaching locations (especially malls and office parks), you will often deal directly with these corporate landlords and property management firms.
+
+• Growthpoint Properties: Owns a vast portfolio of commercial/office space (including V&A Waterfront stakes and Bellville office parks).
+• Redefine Properties: Manages major industrial parks, Blue Route Mall, Kenilworth Centre, and Black River Park.
+• Broll Property Group: The largest independent property management company in SA, managing multiple shopping centres (e.g., Tyger Valley).
+• Hyprop Investments: REIT focusing on premium retail centres like Canal Walk and CapeGate.
+• Rabie Property Group: The primary developers and managers within the Century City precinct.
+• Old Mutual Property: Manages prominent retail assets like Cavendish Square.
+• Excellerate (JHI) & Eris Property Group: Both manage extensive commercial and industrial portfolios across the Cape Town metropolitan area.`,
+    tags: ['Property Management', 'Landlords', 'REITs'] 
   }
 ];
