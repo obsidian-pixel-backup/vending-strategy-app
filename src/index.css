@@ -165,7 +165,7 @@ h1 {
   margin-left: 260px;
   flex: 1;
   padding: 4rem;
-  max-width: 1400px;
+  max-width: 1800px;
 }
 
 @media (max-width: 1024px) {
@@ -481,6 +481,19 @@ select.number-input option {
     position: sticky;
     top: 2rem;
     flex-shrink: 0;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+  }
+  
+  .financial-sidebar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .financial-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+  }
+  .financial-sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.2);
   }
 }
 

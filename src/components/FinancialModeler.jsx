@@ -65,6 +65,8 @@ export default function FinancialModeler() {
   const [electricity, setElectricity] = useState(350); // R
   const [insurance, setInsurance] = useState(250); // R
   const [maintenance, setMaintenance] = useState(200); // R
+  const [fuelBase, setFuelBase] = useState(200); // R
+  const [adminMisc, setAdminMisc] = useState(0); // R
 
   // --- CALCULATIONS ---
   const weeksPerMonth = 4.33;
@@ -117,7 +119,8 @@ export default function FinancialModeler() {
   const totalMaintenance = maintenance * machines;
   
   // Fuel scales sub-linearly
-  const totalFuel = 200 * weeksPerMonth * (1 + (machines - 1) * 0.25);
+  const totalFuel = fuelBase * weeksPerMonth * (1 + (machines - 1) * 0.25);
+  const totalAdminMisc = adminMisc * machines;
   
   // Rent
   const totalRent = rentType === 'commission' 
@@ -130,7 +133,7 @@ export default function FinancialModeler() {
   const totalNayaxSub = nayaxSub * machines;
   const totalPaymentFees = totalTransactionFees + totalNayaxSub;
 
-  const totalOverheads = totalElectricity + totalInsurance + totalMaintenance + totalFuel + totalRent + totalPaymentFees;
+  const totalOverheads = totalElectricity + totalInsurance + totalMaintenance + totalFuel + totalRent + totalPaymentFees + totalAdminMisc;
 
   const netProfit = totalMonthlyGrossProfit - totalOverheads;
   const annualProfit = netProfit * 12;
@@ -172,14 +175,12 @@ export default function FinancialModeler() {
           </div>
         </div>
 
-        {/* Operating Overheads */}
-        <div className="glass-panel" style={{ flex: '2 1 400px' }}>
-          <h3 style={{ borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem', marginBottom: '1rem' }}>2. Operating Overheads & Contracts</h3>
-          
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem' }}>
-            
+        {/* Contracts & Payments */}
+        <div className="glass-panel" style={{ flex: '1 1 300px' }}>
+          <h3 style={{ borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem', marginBottom: '1rem' }}>2. Contracts & Payments</h3>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1rem' }}>
             {/* Rent Toggle */}
-            <div style={{ gridColumn: '1 / -1', background: 'rgba(255,255,255,0.05)', padding: '1rem', borderRadius: '8px', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <div style={{ gridColumn: '1 / -1', background: 'rgba(255,255,255,0.05)', padding: '1rem', borderRadius: '8px', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div style={{ display: 'flex', gap: '1rem' }}>
                 <button onClick={() => setRentType('commission')} className={`tab-button ${rentType === 'commission' ? 'active' : ''}`} style={{ padding: '0.4rem 1rem' }}>Commission %</button>
                 <button onClick={() => setRentType('fixed')} className={`tab-button ${rentType === 'fixed' ? 'active' : ''}`} style={{ padding: '0.4rem 1rem' }}>Fixed Rent</button>
@@ -198,8 +199,6 @@ export default function FinancialModeler() {
                 )}
               </div>
             </div>
-
-            {/* Nayax */}
             <div>
               <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Nayax R/mo</div>
               <input type="number" value={nayaxSub} onChange={(e) => setNayaxSub(Number(e.target.value))} className="number-input" style={{ width: '100%' }} />
@@ -211,6 +210,33 @@ export default function FinancialModeler() {
             <div>
               <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Cashless %</div>
               <input type="number" value={cashlessRatio} onChange={(e) => setCashlessRatio(Number(e.target.value))} className="number-input" style={{ width: '100%' }} />
+            </div>
+          </div>
+        </div>
+
+        {/* Comprehensive Overheads */}
+        <div className="glass-panel" style={{ flex: '1 1 300px' }}>
+          <h3 style={{ borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem', marginBottom: '1rem' }}>3. Fixed & Variable Overheads</h3>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '1rem' }}>
+            <div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Electricity (R)</div>
+              <input type="number" value={electricity} onChange={(e) => setElectricity(Number(e.target.value))} className="number-input" style={{ width: '100%' }} />
+            </div>
+            <div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Insurance (R)</div>
+              <input type="number" value={insurance} onChange={(e) => setInsurance(Number(e.target.value))} className="number-input" style={{ width: '100%' }} />
+            </div>
+            <div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Maintenance (R)</div>
+              <input type="number" value={maintenance} onChange={(e) => setMaintenance(Number(e.target.value))} className="number-input" style={{ width: '100%' }} />
+            </div>
+            <div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Fuel Base (R)</div>
+              <input type="number" value={fuelBase} onChange={(e) => setFuelBase(Number(e.target.value))} className="number-input" style={{ width: '100%' }} />
+            </div>
+            <div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Admin/Misc (R)</div>
+              <input type="number" value={adminMisc} onChange={(e) => setAdminMisc(Number(e.target.value))} className="number-input" style={{ width: '100%' }} />
             </div>
           </div>
         </div>
@@ -373,6 +399,10 @@ export default function FinancialModeler() {
             <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.5rem' }}>
               <span style={{ color: 'var(--text-muted)' }}>Insurance & Maint.</span>
               <span>R {(totalInsurance + totalMaintenance).toLocaleString(undefined, {maximumFractionDigits:0})}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.5rem' }}>
+              <span style={{ color: 'var(--text-muted)' }}>Admin & Misc</span>
+              <span>R {totalAdminMisc.toLocaleString(undefined, {maximumFractionDigits:0})}</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '0.5rem', fontWeight: 'bold', color: '#ef4444' }}>
               <span>Total Overheads</span>
