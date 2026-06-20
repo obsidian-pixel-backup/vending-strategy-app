@@ -440,3 +440,102 @@ select.number-input option {
   margin-top: 2rem;
 }
 
+/* Financial Modeler Specific Layout */
+.financial-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+@media (min-width: 1200px) {
+  .financial-layout {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+.financial-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+  /* Ensure min-width so flex container doesn't overflow */
+  min-width: 0;
+}
+
+.financial-sidebar {
+  width: 100%;
+  background: linear-gradient(145deg, rgba(20,20,25,0.98), rgba(10,10,15,0.98));
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 1200px) {
+  .financial-sidebar {
+    width: 400px;
+    position: sticky;
+    top: 2rem;
+    flex-shrink: 0;
+  }
+}
+
+/* Enhanced hover for product cards */
+.product-card {
+  background: rgba(255,255,255,0.02);
+  padding: 1.5rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.product-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.03), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(255,255,255,0.2);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.product-card:hover::before {
+  transform: translateX(100%);
+}
+
+.product-card.disabled {
+  opacity: 0.4;
+  filter: grayscale(80%);
+}
+
+.product-card.disabled:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: rgba(255,255,255,0.05);
+}
+
+.product-card.disabled:hover::before {
+  transform: translateX(-100%);
+}
+
+.gradient-text {
+  background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
