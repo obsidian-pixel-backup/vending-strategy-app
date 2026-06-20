@@ -78,7 +78,7 @@ h1 {
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
   border-radius: 12px;
-  padding: 2rem;
+  padding: 1.5rem;
   transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
@@ -164,7 +164,7 @@ h1 {
 .main-content {
   margin-left: 260px;
   flex: 1;
-  padding: 4rem;
+  padding: 2rem;
   max-width: 1800px;
 }
 
@@ -444,7 +444,7 @@ select.number-input option {
 .financial-layout {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 @media (min-width: 1200px) {
@@ -458,7 +458,7 @@ select.number-input option {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
   width: 100%;
   /* Ensure min-width so flex container doesn't overflow */
   min-width: 0;

@@ -147,15 +147,12 @@ export default function FinancialModeler() {
       {/* LEFT CONTENT AREA */}
       <div className="financial-main">
         
-        <div style={{ textAlign: 'left' }}>
-          <h2 className="gradient-text" style={{ fontSize: '2.5rem', fontWeight: 800, margin: 0 }}>Deep Financial Modeler</h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', marginTop: '0.5rem' }}>Interactive Unit Economics & P&L Forecaster</p>
-        </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', width: '100%' }}>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', width: '100%' }}>
           
           {/* TOP CONTROLS */}
-          <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
         
         {/* Fleet Definition */}
         <div className="glass-panel" style={{ flex: '1 1 300px' }}>
@@ -167,10 +164,12 @@ export default function FinancialModeler() {
                 <span style={{ fontWeight: 'bold' }}>{machines} Units</span>
               </div>
               <input type="range" min="1" max="50" value={machines} onChange={(e) => setMachines(Number(e.target.value))} className="interactive-slider" style={{ width: '100%', marginTop: '0.5rem' }} />
+              <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>Total vending units deployed.</div>
             </div>
             <div>
               <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Avg CapEx Per Machine (R)</div>
               <input type="number" value={machineCapex} onChange={(e) => setMachineCapex(Number(e.target.value))} className="number-input" style={{ width: '100%' }} />
+              <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>Upfront cost per machine.</div>
             </div>
           </div>
         </div>
@@ -198,18 +197,22 @@ export default function FinancialModeler() {
                   </div>
                 )}
               </div>
+              <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>Location placement fee.</div>
             </div>
             <div>
               <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Nayax R/mo</div>
               <input type="number" value={nayaxSub} onChange={(e) => setNayaxSub(Number(e.target.value))} className="number-input" style={{ width: '100%' }} />
+              <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>Monthly card reader fee.</div>
             </div>
             <div>
               <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Nayax Fee %</div>
               <input type="number" value={nayaxFeeRate} onChange={(e) => setNayaxFeeRate(Number(e.target.value))} className="number-input" style={{ width: '100%' }} />
+              <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>Bank transaction fee.</div>
             </div>
             <div>
               <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Cashless %</div>
               <input type="number" value={cashlessRatio} onChange={(e) => setCashlessRatio(Number(e.target.value))} className="number-input" style={{ width: '100%' }} />
+              <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>Est. card vs cash usage.</div>
             </div>
           </div>
         </div>
@@ -221,22 +224,27 @@ export default function FinancialModeler() {
             <div>
               <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Electricity (R)</div>
               <input type="number" value={electricity} onChange={(e) => setElectricity(Number(e.target.value))} className="number-input" style={{ width: '100%' }} />
+              <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>Avg monthly power.</div>
             </div>
             <div>
               <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Insurance (R)</div>
               <input type="number" value={insurance} onChange={(e) => setInsurance(Number(e.target.value))} className="number-input" style={{ width: '100%' }} />
+              <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>Avg monthly policy.</div>
             </div>
             <div>
               <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Maintenance (R)</div>
               <input type="number" value={maintenance} onChange={(e) => setMaintenance(Number(e.target.value))} className="number-input" style={{ width: '100%' }} />
+              <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>Expected repairs.</div>
             </div>
             <div>
               <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Fuel Base (R)</div>
               <input type="number" value={fuelBase} onChange={(e) => setFuelBase(Number(e.target.value))} className="number-input" style={{ width: '100%' }} />
+              <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>Transport/logistics.</div>
             </div>
             <div>
               <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Admin/Misc (R)</div>
               <input type="number" value={adminMisc} onChange={(e) => setAdminMisc(Number(e.target.value))} className="number-input" style={{ width: '100%' }} />
+              <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>Software/Accounting.</div>
             </div>
           </div>
         </div>
@@ -260,7 +268,7 @@ export default function FinancialModeler() {
           </div>
         </div>
         
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '1.5rem' }}>
           
           {inventory
             .filter(item => filterCategory === 'All' || item.category === filterCategory)
@@ -362,7 +370,7 @@ export default function FinancialModeler() {
         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
         <h3 style={{ borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem', marginBottom: '1.5rem', fontSize: '1.2rem' }}>Fleet Profit & Loss (Monthly)</h3>
         
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1.5rem', marginBottom: '1.5rem' }}>
           <div>
             <div style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem', fontSize: '0.9rem' }}>Gross Revenue</div>
             <div style={{ fontSize: '1.5rem', fontWeight: 600 }}>R {totalMonthlyRevenue.toLocaleString(undefined, {maximumFractionDigits:0})}</div>
@@ -377,7 +385,7 @@ export default function FinancialModeler() {
           </div>
         </div>
 
-        <div style={{ background: 'rgba(0,0,0,0.3)', padding: '1.5rem', borderRadius: '8px', marginBottom: '2rem' }}>
+        <div style={{ background: 'rgba(0,0,0,0.3)', padding: '1.5rem', borderRadius: '8px', marginBottom: '1.5rem' }}>
           <h4 style={{ color: 'var(--text-secondary)', marginBottom: '1rem', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Operating Expenses (OpEx)</h4>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0.5rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.5rem' }}>
