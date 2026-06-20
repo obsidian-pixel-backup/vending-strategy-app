@@ -16,29 +16,44 @@ const formatCurrency = (value) => {
   return `${isNegative ? '-' : ''}R ${absValue.toFixed(0)}`;
 };
 
+const defaultInventory = [
+  { id: '1', name: 'Coca-Cola Original (300ml Can)', category: 'Drinks', cost: 12.50, price: 20.00, volume: 40, enabled: true },
+  { id: '2', name: 'Valpré Still Water (500ml Bottle)', category: 'Drinks', cost: 7.50, price: 15.00, volume: 30, enabled: true },
+  { id: '3', name: 'Red Bull Energy Drink (250ml Can)', category: 'Drinks', cost: 18.50, price: 35.00, volume: 20, enabled: true },
+  { id: '4', name: 'Lipton Peach Iced Tea (300ml Can)', category: 'Drinks', cost: 13.00, price: 22.00, volume: 20, enabled: true },
+  { id: '5', name: 'Steri Stumpie Flavoured Milk (350ml)', category: 'Drinks', cost: 14.50, price: 25.00, volume: 20, enabled: true },
+  { id: '6', name: 'Simba Chips (36g)', category: 'Chips', cost: 7.70, price: 15.00, volume: 30, enabled: true },
+  { id: '7', name: "Lay's Lightly Salted (36g)", category: 'Chips', cost: 8.00, price: 15.00, volume: 30, enabled: true },
+  { id: '8', name: 'Doritos Sweet Chilli Pepper (45g)', category: 'Chips', cost: 8.50, price: 16.00, volume: 25, enabled: true },
+  { id: '9', name: 'Safari Peanuts & Raisins (50g)', category: 'Snacks', cost: 8.50, price: 16.00, volume: 25, enabled: true },
+  { id: '10', name: 'Beef Biltong Snack Pack (35g)', category: 'Snacks', cost: 22.00, price: 40.00, volume: 15, enabled: true },
+  { id: '11', name: 'Cadbury Lunch Bar (48g)', category: 'Chocolates', cost: 9.50, price: 18.00, volume: 20, enabled: true },
+  { id: '12', name: 'Nestlé Bar One (50g)', category: 'Chocolates', cost: 10.50, price: 20.00, volume: 20, enabled: true },
+  { id: '13', name: 'Jungle Oats Energy Bar (40g)', category: 'Chocolates', cost: 9.00, price: 18.00, volume: 20, enabled: true },
+  { id: '14', name: 'Maynards Jelly Tots (100g)', category: 'Sweets', cost: 16.00, price: 28.00, volume: 15, enabled: true },
+  { id: '15', name: 'Cadbury Dairy Milk Slab (80g)', category: 'Chocolates', cost: 18.50, price: 30.00, volume: 15, enabled: true },
+  { id: '16', name: 'Panado Pain Tablets (2-Pack Foil)', category: 'Essentials', cost: 5.00, price: 12.00, volume: 20, enabled: true },
+  { id: '17', name: 'Twinsaver Pocket Tissues', category: 'Essentials', cost: 4.50, price: 10.00, volume: 20, enabled: true },
+  { id: '18', name: 'Universal Charging Cable (USB-C)', category: 'Essentials', cost: 35.00, price: 80.00, volume: 5, enabled: true },
+  { id: '19', name: 'Zam-Buk Herbal Ointment (7g)', category: 'Essentials', cost: 15.00, price: 30.00, volume: 10, enabled: true },
+  { id: '20', name: 'Hand Sanitizer (50ml)', category: 'Essentials', cost: 12.00, price: 25.00, volume: 15, enabled: true },
+];
+
 export default function FinancialModeler() {
   // --- FLEET SETTINGS ---
   const [machines, setMachines] = useState(4);
   const [machineCapex, setMachineCapex] = useState(25000);
 
-  // --- PRODUCT MIX (Per Machine / Week) ---
-  // Beverages (e.g., Coke)
-  const [includeBev, setIncludeBev] = useState(true);
-  const [bevCost, setBevCost] = useState(12.5);
-  const [bevPrice, setBevPrice] = useState(20);
-  const [bevVol, setBevVol] = useState(80);
-
-  // Confectionery (e.g., Chocolates)
-  const [includeChoc, setIncludeChoc] = useState(true);
-  const [chocCost, setChocCost] = useState(16.5);
-  const [chocPrice, setChocPrice] = useState(25);
-  const [chocVol, setChocVol] = useState(70);
-
-  // Healthy/Niche (e.g., Protein Bars, Biltong)
-  const [includeNiche, setIncludeNiche] = useState(true);
-  const [nicheCost, setNicheCost] = useState(25);
-  const [nichePrice, setNichePrice] = useState(45);
-  const [nicheVol, setNicheVol] = useState(30);
+  // --- DYNAMIC INVENTORY ---
+  const [inventory, setInventory] = useState(defaultInventory);
+  
+  // Add item form state
+  const [newItemName, setNewItemName] = useState('');
+  const [newItemCat, setNewItemCat] = useState('Drinks');
+  const [newItemCost, setNewItemCost] = useState('');
+  const [newItemPrice, setNewItemPrice] = useState('');
+  const [newItemVol, setNewItemVol] = useState('');
+  const [filterCategory, setFilterCategory] = useState('All');
 
   // --- OVERHEADS (Monthly per Machine) ---
   const [rentType, setRentType] = useState('commission'); // 'commission' or 'fixed'
@@ -54,18 +69,43 @@ export default function FinancialModeler() {
   // --- CALCULATIONS ---
   const weeksPerMonth = 4.33;
 
-  // Individual Product Profitability (Per Machine / Month)
-  const bevGrossProfit = includeBev ? (bevPrice - bevCost) * bevVol * weeksPerMonth : 0;
-  const chocGrossProfit = includeChoc ? (chocPrice - chocCost) * chocVol * weeksPerMonth : 0;
-  const nicheGrossProfit = includeNiche ? (nichePrice - nicheCost) * nicheVol * weeksPerMonth : 0;
+  // Inventory logic
+  const handleInventoryChange = (id, field, value) => {
+    setInventory(inventory.map(item => 
+      item.id === id ? { ...item, [field]: value } : item
+    ));
+  };
 
-  const bevRevenue = includeBev ? bevPrice * bevVol * weeksPerMonth : 0;
-  const chocRevenue = includeChoc ? chocPrice * chocVol * weeksPerMonth : 0;
-  const nicheRevenue = includeNiche ? nichePrice * nicheVol * weeksPerMonth : 0;
+  const removeInventoryItem = (id) => {
+    setInventory(inventory.filter(item => item.id !== id));
+  };
+
+  const handleAddItem = (e) => {
+    e.preventDefault();
+    if (!newItemName || !newItemCost || !newItemPrice || !newItemVol) return;
+    
+    const newItem = {
+      id: Date.now().toString(),
+      name: newItemName,
+      category: newItemCat,
+      cost: Number(newItemCost),
+      price: Number(newItemPrice),
+      volume: Number(newItemVol),
+      enabled: true
+    };
+    
+    setInventory([...inventory, newItem]);
+    setNewItemName('');
+    setNewItemCost('');
+    setNewItemPrice('');
+    setNewItemVol('');
+  };
 
   // Fleet Totals (Monthly)
-  const monthlyRevenuePerMachine = bevRevenue + chocRevenue + nicheRevenue;
-  const monthlyGrossProfitPerMachine = bevGrossProfit + chocGrossProfit + nicheGrossProfit;
+  const activeItems = inventory.filter(i => i.enabled);
+  
+  const monthlyRevenuePerMachine = activeItems.reduce((sum, item) => sum + (item.price * item.volume * weeksPerMonth), 0);
+  const monthlyGrossProfitPerMachine = activeItems.reduce((sum, item) => sum + ((item.price - item.cost) * item.volume * weeksPerMonth), 0);
   
   const totalMonthlyRevenue = monthlyRevenuePerMachine * machines;
   const totalMonthlyGrossProfit = monthlyGrossProfitPerMachine * machines;
@@ -101,54 +141,62 @@ export default function FinancialModeler() {
     <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       
       <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
-        <h1>Deep Financial Modeler</h1>
-        <p className="subtitle">Track individual item costs, margins, and fleet ROI</p>
+        <h2 style={{ fontSize: '2.5rem', fontWeight: 800, margin: 0, background: 'linear-gradient(45deg, #3b82f6, #8b5cf6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Deep Financial Modeler</h2>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', marginTop: '0.5rem' }}>Interactive Unit Economics & P&L Forecaster</p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
-        
-        {/* FLEET & CAPEX */}
-        <div className="glass-panel">
-          <h3 style={{ borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem', marginBottom: '1rem' }}>Fleet Setup</h3>
+      <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start', flexWrap: 'wrap' }}>
+        <div style={{ flex: '1 1 60%', display: 'flex', flexDirection: 'column', gap: '2rem', minWidth: '350px' }}>
           
-          <div style={{ marginBottom: '1.5rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
-              <span style={{ color: 'var(--text-secondary)' }}>Fleet Size</span>
-              <span className="pill">{machines} Units</span>
+          {/* TOP CONTROLS */}
+          <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+        
+        {/* Fleet Definition */}
+        <div className="glass-panel" style={{ flex: '1 1 300px' }}>
+          <h3 style={{ borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem', marginBottom: '1rem' }}>1. Fleet Scale</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <label>Number of Machines</label>
+                <span style={{ fontWeight: 'bold' }}>{machines} Units</span>
+              </div>
+              <input type="range" min="1" max="50" value={machines} onChange={(e) => setMachines(Number(e.target.value))} className="slider" style={{ width: '100%', marginTop: '0.5rem' }} />
             </div>
-            <input type="range" min="1" max="100" step="1" value={machines} onChange={(e) => setMachines(Number(e.target.value))} className="interactive-slider" />
-          </div>
-
-          <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
-              <span style={{ color: 'var(--text-secondary)' }}>Hardware CapEx (Per Unit)</span>
-              <span className="pill">R {machineCapex.toLocaleString()}</span>
+            <div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Avg CapEx Per Machine (R)</div>
+              <input type="number" value={machineCapex} onChange={(e) => setMachineCapex(Number(e.target.value))} className="number-input" style={{ width: '100%' }} />
             </div>
-            <input type="range" min="10000" max="80000" step="1000" value={machineCapex} onChange={(e) => setMachineCapex(Number(e.target.value))} className="interactive-slider" />
           </div>
         </div>
 
-        {/* OVERHEADS */}
-        <div className="glass-panel">
-          <h3 style={{ borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem', marginBottom: '1rem' }}>Monthly Overheads (Per Machine)</h3>
+        {/* Operating Overheads */}
+        <div className="glass-panel" style={{ flex: '2 1 400px' }}>
+          <h3 style={{ borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem', marginBottom: '1rem' }}>2. Operating Overheads & Contracts</h3>
           
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
-            <div>
-              <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.3rem' }}>Rent Model</div>
-              <select value={rentType} onChange={(e) => setRentType(e.target.value)} className="number-input" style={{ width: '100%', padding: '0.5rem' }}>
-                <option value="commission">Commission %</option>
-                <option value="fixed">Fixed Rent</option>
-              </select>
-            </div>
-            <div>
-              <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.3rem' }}>
-                {rentType === 'commission' ? 'Rate (%)' : 'Amount (R)'}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem' }}>
+            
+            {/* Rent Toggle */}
+            <div style={{ gridColumn: '1 / -1', background: 'rgba(255,255,255,0.05)', padding: '1rem', borderRadius: '8px', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+              <div style={{ display: 'flex', gap: '1rem' }}>
+                <button onClick={() => setRentType('commission')} className={`tab-button ${rentType === 'commission' ? 'active' : ''}`} style={{ padding: '0.4rem 1rem' }}>Commission %</button>
+                <button onClick={() => setRentType('fixed')} className={`tab-button ${rentType === 'fixed' ? 'active' : ''}`} style={{ padding: '0.4rem 1rem' }}>Fixed Rent</button>
               </div>
-              <input type="number" value={rentType === 'commission' ? commissionRate : fixedRent} onChange={(e) => rentType === 'commission' ? setCommissionRate(Number(e.target.value)) : setFixedRent(Number(e.target.value))} className="number-input" style={{ width: '100%' }} />
+              <div style={{ flex: 1 }}>
+                {rentType === 'commission' ? (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Landlord Cut:</span>
+                    <input type="number" value={commissionRate} onChange={(e) => setCommissionRate(Number(e.target.value))} className="number-input" style={{ width: '80px' }} /> %
+                  </div>
+                ) : (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Flat Rent:</span>
+                    R <input type="number" value={fixedRent} onChange={(e) => setFixedRent(Number(e.target.value))} className="number-input" style={{ width: '100px' }} /> /mo
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.5rem' }}>
+            {/* Nayax */}
             <div>
               <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Nayax R/mo</div>
               <input type="number" value={nayaxSub} onChange={(e) => setNayaxSub(Number(e.target.value))} className="number-input" style={{ width: '100%' }} />
@@ -166,89 +214,119 @@ export default function FinancialModeler() {
 
       </div>
 
-      {/* PRODUCT BASKET */}
+      {/* DYNAMIC PRODUCT BASKET */}
       <div className="glass-panel">
-        <h3 style={{ borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem', marginBottom: '1rem' }}>Individual Product Economics (Per Machine)</h3>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem', marginBottom: '1rem' }}>
+          <h3 style={{ margin: 0 }}>Dynamic Product Inventory (Per Machine)</h3>
+          <div>
+            <select value={filterCategory} onChange={e => setFilterCategory(e.target.value)} className="number-input" style={{ padding: '0.3rem', fontSize: '0.9rem' }}>
+              <option value="All">All Categories</option>
+              <option value="Drinks">Drinks</option>
+              <option value="Chips">Chips</option>
+              <option value="Snacks">Snacks</option>
+              <option value="Chocolates">Chocolates</option>
+              <option value="Sweets">Sweets</option>
+              <option value="Essentials">Essentials</option>
+            </select>
+          </div>
+        </div>
         
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
           
-          {/* Beverages */}
-          <div style={{ background: 'rgba(255,255,255,0.02)', padding: '1rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)', opacity: includeBev ? 1 : 0.5, transition: 'all 0.2s' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <h4 style={{ color: 'var(--accent-primary)', margin: 0 }}>Beverages (Cans/Bottles)</h4>
-              <input type="checkbox" checked={includeBev} onChange={(e) => setIncludeBev(e.target.checked)} style={{ width: '1.2rem', height: '1.2rem', accentColor: 'var(--accent-primary)', cursor: 'pointer' }} />
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Wholesale Cost (R)</span>
-              <input type="number" value={bevCost} onChange={(e) => setBevCost(Number(e.target.value))} className="number-input" style={{ width: '80px' }} />
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Retail Price (R)</span>
-              <input type="number" value={bevPrice} onChange={(e) => setBevPrice(Number(e.target.value))} className="number-input" style={{ width: '80px' }} />
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Weekly Volume</span>
-              <input type="number" value={bevVol} onChange={(e) => setBevVol(Number(e.target.value))} className="number-input" style={{ width: '80px' }} />
-            </div>
-            <div style={{ borderTop: '1px dashed var(--glass-border)', paddingTop: '0.5rem', display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', fontWeight: 500 }}>
-              <span>Gross Margin</span>
-              <span style={{ color: ((bevPrice - bevCost) / bevPrice) > 0.4 ? 'var(--accent-success)' : '#ef4444' }}>{(((bevPrice - bevCost) / bevPrice) * 100).toFixed(0)}%</span>
-            </div>
-          </div>
+          {inventory
+            .filter(item => filterCategory === 'All' || item.category === filterCategory)
+            .map(item => {
+            const margin = ((item.price - item.cost) / item.price) * 100;
+            const isGoodMargin = margin >= 40;
 
-          {/* Confectionery */}
-          <div style={{ background: 'rgba(255,255,255,0.02)', padding: '1rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)', opacity: includeChoc ? 1 : 0.5, transition: 'all 0.2s' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <h4 style={{ color: '#a855f7', margin: 0 }}>Snacks & Confectionery</h4>
-              <input type="checkbox" checked={includeChoc} onChange={(e) => setIncludeChoc(e.target.checked)} style={{ width: '1.2rem', height: '1.2rem', accentColor: '#a855f7', cursor: 'pointer' }} />
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Wholesale Cost (R)</span>
-              <input type="number" value={chocCost} onChange={(e) => setChocCost(Number(e.target.value))} className="number-input" style={{ width: '80px' }} />
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Retail Price (R)</span>
-              <input type="number" value={chocPrice} onChange={(e) => setChocPrice(Number(e.target.value))} className="number-input" style={{ width: '80px' }} />
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Weekly Volume</span>
-              <input type="number" value={chocVol} onChange={(e) => setChocVol(Number(e.target.value))} className="number-input" style={{ width: '80px' }} />
-            </div>
-            <div style={{ borderTop: '1px dashed var(--glass-border)', paddingTop: '0.5rem', display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', fontWeight: 500 }}>
-              <span>Gross Margin</span>
-              <span style={{ color: ((chocPrice - chocCost) / chocPrice) > 0.4 ? 'var(--accent-success)' : '#ef4444' }}>{(((chocPrice - chocCost) / chocPrice) * 100).toFixed(0)}%</span>
-            </div>
-          </div>
+            let colorHex = 'var(--text-primary)';
+            if (item.category === 'Drinks') colorHex = '#3b82f6';
+            if (item.category === 'Chips') colorHex = '#f59e0b';
+            if (item.category === 'Snacks') colorHex = '#d97706';
+            if (item.category === 'Chocolates') colorHex = '#8b5cf6';
+            if (item.category === 'Sweets') colorHex = '#ec4899';
+            if (item.category === 'Essentials') colorHex = '#10b981';
 
-          {/* Niche */}
-          <div style={{ background: 'rgba(255,255,255,0.02)', padding: '1rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)', opacity: includeNiche ? 1 : 0.5, transition: 'all 0.2s' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <h4 style={{ color: '#eab308', margin: 0 }}>Health & Niche (Biltong)</h4>
-              <input type="checkbox" checked={includeNiche} onChange={(e) => setIncludeNiche(e.target.checked)} style={{ width: '1.2rem', height: '1.2rem', accentColor: '#eab308', cursor: 'pointer' }} />
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Wholesale Cost (R)</span>
-              <input type="number" value={nicheCost} onChange={(e) => setNicheCost(Number(e.target.value))} className="number-input" style={{ width: '80px' }} />
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Retail Price (R)</span>
-              <input type="number" value={nichePrice} onChange={(e) => setNichePrice(Number(e.target.value))} className="number-input" style={{ width: '80px' }} />
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Weekly Volume</span>
-              <input type="number" value={nicheVol} onChange={(e) => setNicheVol(Number(e.target.value))} className="number-input" style={{ width: '80px' }} />
-            </div>
-            <div style={{ borderTop: '1px dashed var(--glass-border)', paddingTop: '0.5rem', display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', fontWeight: 500 }}>
-              <span>Gross Margin</span>
-              <span style={{ color: ((nichePrice - nicheCost) / nichePrice) > 0.4 ? 'var(--accent-success)' : '#ef4444' }}>{(((nichePrice - nicheCost) / nichePrice) * 100).toFixed(0)}%</span>
-            </div>
-          </div>
+            return (
+              <div key={item.id} style={{ background: 'rgba(255,255,255,0.02)', padding: '1.2rem', borderRadius: '12px', border: `1px solid ${item.enabled ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.02)'}`, opacity: item.enabled ? 1 : 0.4, transition: 'all 0.2s', position: 'relative' }}>
+                
+                <button 
+                  onClick={() => removeInventoryItem(item.id)}
+                  style={{ position: 'absolute', top: '0.5rem', right: '0.5rem', background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '1rem' }}
+                  title="Remove Item"
+                >
+                  &times;
+                </button>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', paddingRight: '1rem' }}>
+                  <h4 style={{ color: colorHex, margin: 0, fontSize: '1.1rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</h4>
+                  <input type="checkbox" checked={item.enabled} onChange={(e) => handleInventoryChange(item.id, 'enabled', e.target.checked)} style={{ width: '1.2rem', height: '1.2rem', cursor: 'pointer' }} />
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', alignItems: 'center' }}>
+                  <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Cost (R)</span>
+                  <input type="number" step="0.1" value={item.cost} onChange={(e) => handleInventoryChange(item.id, 'cost', Number(e.target.value))} className="number-input" style={{ width: '80px', padding: '0.2rem 0.5rem' }} />
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', alignItems: 'center' }}>
+                  <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Retail (R)</span>
+                  <input type="number" step="0.5" value={item.price} onChange={(e) => handleInventoryChange(item.id, 'price', Number(e.target.value))} className="number-input" style={{ width: '80px', padding: '0.2rem 0.5rem' }} />
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', alignItems: 'center' }}>
+                  <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Weekly Vol</span>
+                  <input type="number" value={item.volume} onChange={(e) => handleInventoryChange(item.id, 'volume', Number(e.target.value))} className="number-input" style={{ width: '80px', padding: '0.2rem 0.5rem' }} />
+                </div>
+
+                <div style={{ borderTop: '1px dashed var(--glass-border)', paddingTop: '0.5rem', display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', fontWeight: 500 }}>
+                  <span>Gross Margin</span>
+                  <span style={{ color: isGoodMargin ? 'var(--accent-success)' : '#ef4444' }}>{margin.toFixed(0)}%</span>
+                </div>
+              </div>
+            );
+          })}
 
         </div>
-      </div>
 
-      {/* MASTER P&L */}
-      <div className="glass-panel" style={{ background: 'linear-gradient(145deg, rgba(30,30,40,0.8), rgba(20,20,30,0.9))' }}>
+        {/* ADD NEW PRODUCT FORM */}
+        <div style={{ background: 'rgba(0,0,0,0.2)', padding: '1.5rem', borderRadius: '12px', border: '1px dashed rgba(255,255,255,0.1)' }}>
+          <h4 style={{ margin: '0 0 1rem 0' }}>+ Add Custom Product</h4>
+          <form onSubmit={handleAddItem} style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'flex-end' }}>
+            <div style={{ flex: '1 1 200px' }}>
+              <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '0.3rem' }}>Product Name</label>
+              <input type="text" value={newItemName} onChange={e => setNewItemName(e.target.value)} className="number-input" style={{ width: '100%', textAlign: 'left', padding: '0.5rem' }} placeholder="e.g. Steri Stumpie" required />
+            </div>
+            <div style={{ width: '120px' }}>
+              <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '0.3rem' }}>Category</label>
+              <select value={newItemCat} onChange={e => setNewItemCat(e.target.value)} className="number-input" style={{ width: '100%', padding: '0.5rem' }}>
+                <option value="Drinks">Drinks</option>
+                <option value="Chips">Chips</option>
+                <option value="Snacks">Snacks</option>
+                <option value="Chocolates">Chocolates</option>
+                <option value="Sweets">Sweets</option>
+                <option value="Essentials">Essentials</option>
+              </select>
+            </div>
+            <div style={{ width: '90px' }}>
+              <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '0.3rem' }}>Cost (R)</label>
+              <input type="number" step="0.1" value={newItemCost} onChange={e => setNewItemCost(e.target.value)} className="number-input" style={{ width: '100%', padding: '0.5rem' }} required />
+            </div>
+            <div style={{ width: '90px' }}>
+              <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '0.3rem' }}>Price (R)</label>
+              <input type="number" step="0.5" value={newItemPrice} onChange={e => setNewItemPrice(e.target.value)} className="number-input" style={{ width: '100%', padding: '0.5rem' }} required />
+            </div>
+            <div style={{ width: '90px' }}>
+              <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '0.3rem' }}>Vol/Wk</label>
+              <input type="number" value={newItemVol} onChange={e => setNewItemVol(e.target.value)} className="number-input" style={{ width: '100%', padding: '0.5rem' }} required />
+            </div>
+            <button type="submit" className="tab-button active" style={{ padding: '0.5rem 1.5rem', fontWeight: 'bold' }}>Add Item</button>
+          </form>
+        </div>
+
+      </div>
+        </div>
+
+        <div style={{ flex: '1 1 30%', position: 'sticky', top: '2rem', minWidth: '320px' }}>
+          {/* MASTER P&L */}
+          <div className="glass-panel" style={{ background: 'linear-gradient(145deg, rgba(30,30,40,0.8), rgba(20,20,30,0.9))' }}>
         <h3 style={{ borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem', marginBottom: '1.5rem', fontSize: '1.2rem' }}>Fleet Profit & Loss (Monthly)</h3>
         
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '2rem', marginBottom: '2rem' }}>
@@ -262,48 +340,69 @@ export default function FinancialModeler() {
           </div>
           <div>
             <div style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Gross Profit</div>
-            <div style={{ fontSize: '1.8rem', fontWeight: 600, color: 'var(--accent-primary)' }}>R {totalMonthlyGrossProfit.toLocaleString(undefined, {maximumFractionDigits:0})}</div>
+            <div style={{ fontSize: '1.8rem', fontWeight: 600, color: 'var(--accent-success)' }}>R {totalMonthlyGrossProfit.toLocaleString(undefined, {maximumFractionDigits:0})}</div>
           </div>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', background: 'rgba(0,0,0,0.2)', padding: '1.5rem', borderRadius: '12px' }}>
-          <h4 style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Operating Expenses (OpEx)</h4>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.95rem' }}>
-            <span>Location Rent / Commission</span><span style={{ color: '#ef4444' }}>- R {totalRent.toLocaleString(undefined, {maximumFractionDigits:0})}</span>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.95rem' }}>
-            <span>Nayax SaaS & Bank Fees</span><span style={{ color: '#ef4444' }}>- R {totalPaymentFees.toLocaleString(undefined, {maximumFractionDigits:0})}</span>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.95rem' }}>
-            <span>Electricity & Utilities</span><span style={{ color: '#ef4444' }}>- R {totalElectricity.toLocaleString(undefined, {maximumFractionDigits:0})}</span>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.95rem' }}>
-            <span>Insurance & Maintenance</span><span style={{ color: '#ef4444' }}>- R {(totalInsurance + totalMaintenance).toLocaleString(undefined, {maximumFractionDigits:0})}</span>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.95rem' }}>
-            <span>Fuel & Logistics</span><span style={{ color: '#ef4444' }}>- R {totalFuel.toLocaleString(undefined, {maximumFractionDigits:0})}</span>
-          </div>
-          <div style={{ borderTop: '1px solid var(--glass-border)', margin: '0.5rem 0' }}></div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.5rem', fontWeight: 600 }}>
-            <span>Net Monthly Profit</span>
-            <span style={{ color: netProfit > 0 ? 'var(--accent-success)' : '#ef4444' }}>R {netProfit.toLocaleString(undefined, {maximumFractionDigits:0})}</span>
+        <div style={{ background: 'rgba(0,0,0,0.3)', padding: '1.5rem', borderRadius: '8px', marginBottom: '2rem' }}>
+          <h4 style={{ color: 'var(--text-secondary)', marginBottom: '1rem', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Operating Expenses (OpEx)</h4>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.5rem' }}>
+              <span>Location Rent</span>
+              <span>R {totalRent.toLocaleString(undefined, {maximumFractionDigits:0})}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.5rem' }}>
+              <span>Nayax & Bank Fees</span>
+              <span>R {totalPaymentFees.toLocaleString(undefined, {maximumFractionDigits:0})}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.5rem' }}>
+              <span>Electricity</span>
+              <span>R {totalElectricity.toLocaleString(undefined, {maximumFractionDigits:0})}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.5rem' }}>
+              <span>Fuel / Logistics</span>
+              <span>R {totalFuel.toLocaleString(undefined, {maximumFractionDigits:0})}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.5rem' }}>
+              <span>Insurance</span>
+              <span>R {totalInsurance.toLocaleString(undefined, {maximumFractionDigits:0})}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.5rem', fontWeight: 'bold', color: '#ef4444' }}>
+              <span>Total Overheads</span>
+              <span>R {totalOverheads.toLocaleString(undefined, {maximumFractionDigits:0})}</span>
+            </div>
           </div>
         </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', borderTop: '2px solid var(--glass-border)', paddingTop: '2rem' }}>
+          <div style={{ flex: 1 }}>
+            <div style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem', fontSize: '1.2rem' }}>Monthly Net Profit</div>
+            <div style={{ fontSize: '3rem', fontWeight: 800, color: netProfit > 0 ? 'var(--accent-success)' : '#ef4444' }}>
+              R {netProfit.toLocaleString(undefined, {maximumFractionDigits:0})}
+            </div>
+            <div style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>
+              Annual Run Rate: <strong>R {annualProfit.toLocaleString(undefined, {maximumFractionDigits:0})}</strong>
+            </div>
+          </div>
+
+          <div style={{ flex: 1, background: 'rgba(255,255,255,0.05)', padding: '1.5rem', borderRadius: '12px' }}>
+            <div style={{ color: 'var(--text-secondary)', marginBottom: '1rem', fontSize: '1.1rem' }}>Capital Expenditure (CapEx) Return</div>
+            
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+              <span>Total Fleet Cost:</span>
+              <span style={{ fontWeight: 'bold' }}>R {totalCapex.toLocaleString()}</span>
+            </div>
+            
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+              <span>ROI Payback Period:</span>
+              <span style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--accent-primary)' }}>
+                {paybackMonths} Months
+              </span>
+            </div>
+          </div>
+        </div>
+
       </div>
-
-      {/* ROI */}
-      <div className="grid-3 delay-1">
-        <div className="metric-box">
-          <div className="metric-label">Annual Net Profit</div>
-          <div className="metric-value" style={{ color: annualProfit > 0 ? 'var(--accent-success)' : '#ef4444' }}>{formatCurrency(annualProfit)}</div>
-        </div>
-        <div className="metric-box">
-          <div className="metric-label">Total Fleet CapEx</div>
-          <div className="metric-value">{formatCurrency(totalCapex)}</div>
-        </div>
-        <div className="metric-box" style={{ borderBottom: '3px solid var(--accent-primary)' }}>
-          <div className="metric-label">CapEx Payback Period</div>
-          <div className="metric-value">{paybackMonths} <span style={{ fontSize: '1rem', color: 'var(--text-secondary)' }}>Months</span></div>
         </div>
       </div>
 
